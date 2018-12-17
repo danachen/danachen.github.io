@@ -2,7 +2,7 @@ When first learning about collections and the Enumerable module in Ruby, like mo
 
 In this post, I want to articulate my understanding of the method and its applications at this moment. I hope to continue updating my mental model of both the method itself, and the paradigm that it represents (Map/Reduce in functional programing). 
 
-*** H3 why #reduce?
+**Why #reduce?
 
 I began this exploration by first trying to understand the problem #reduce is built to solve.  
 
@@ -10,7 +10,7 @@ Enumerable#reduce, like the rest of the Enumerable methods, work with collection
 
 But unlike #each or #map, where a collection is returned at the end, #reduce performs a different kind of function over a collection. True to name, it "reduces", or accumulates elements of the collection to a single value based on a binary operation, and returns one value at the end. 
 
-*** H3 #reduce syntax
+**#reduce syntax
 
 At first glance, #reduce seems to work with the same type of syntax as other members of the Enumerable class. 
 
@@ -126,7 +126,7 @@ After all that spilled ink, it looks like #reduce method can show up in one of f
 
 Moving on, let's see how it can be used!
 
-*** H3 using #reduce to solve problems
+**using #reduce to solve problems
 
 TL;DR: #reduce is particulalry effective when it comes to accumulating values across an array (accumulating not just in a numerical sense, but also to compare and select other input types such as a string), and is also handy when we want to dynamically build a new object from a collection based on another set of conditions. 
 
