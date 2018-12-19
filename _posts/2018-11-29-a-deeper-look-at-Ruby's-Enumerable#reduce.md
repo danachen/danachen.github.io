@@ -23,7 +23,7 @@ This is how a #map method works its way across a collection: the collection take
 #=> [10, 12, 14, 16, 18, 20]
 ```
 
-The most basic use of #reduce is its go-to use of adding an array of numbers with a block.
+The most basic use of #reduce is its go-to use of "reducing" an array of elements with a block.
 
 ```ruby
 (5..10).reduce { |sum, n| sum + n }
