@@ -14,7 +14,7 @@ But unlike #each or #map, where a collection is returned at the end, #reduce per
 
 At first glance, #reduce seems to work with the same type of syntax as other members of the Enumerable class. 
 
-Let's compare #reduce with #each for the most basic usage. 
+Let's compare #reduce with #map for the most basic usage. 
 
 This is how a #map method works its way across a collection: the collection takes an enumerable object, in this case an array, and executes the block by passing in each element as an argument. The result of evaluating the block is returned as an array. 
 
@@ -32,21 +32,21 @@ The most basic use of #reduce is its go-to use of adding an array of numbers wit
 This looks close enough to a #map function, the only difference being that there are two elements passed in as argument for each step of the collection. We'll look at those in detail in a sec, but in the meantime. we've also seen #reduce written in shorthand like this, without a block.
 
 ```ruby
-(5..10).reduce(0, &:+)
-#=> 45
+(1..5).reduce(1, &:*)
+#=> 120
 ```
 Or like this, without the 0 (accumulator).
 
 ```ruby
-(5..10).reduce(&:+)
-#=> 45
+(1..5).reduce(&:*)
+#=> 120
 ```
 
 Or like this, without even the ampersand. 
 
 ```ruby
-(5..10).reduce(:+)
-#=> 45
+(1..5).reduce(:*)
+#=> 120
 ```
 
 So what is essential, and what is superfluous, when it comes to using the #reduce method?
@@ -75,7 +75,7 @@ The error message tells us that a block is expected in this case.
 2. Provide only the accumulator, no operator or blocks.
 
 ```ruby
-(1..5).reduce(0)
+(1..5).reduce(1)
 #=> 0 is not a symbol nor a string
 ```
 Error message suggests in the absence of a block, it's expecting either a symbol or a string to act as the operator.
@@ -91,7 +91,7 @@ This confirms that the method only accepts a certain type of method, and #to_f i
 4. What if we try to pass in an operator and a block at the same time?
 
 ```ruby
- (1..5).reduce(&:+) {|memo, obj| memo += obj}
+ (1..5).reduce(&:*) {|memo, obj| memo += obj}
 #=> both block arg and actual block given
 ```
 It looks like we can't pass in both an operator and a block. This could be because the & turns the :+ method into a block, which then conflicts with the block that's also getting passed in. 
@@ -99,8 +99,8 @@ It looks like we can't pass in both an operator and a block. This could be becau
 But what if we change the code slightly to the following:
 
 ```ruby
- (1..5).reduce(0, :+) {|memo, obj| memo += obj}
-#=> 15
+ (1..5).reduce(1, :*) {|memo, obj| memo += obj}
+#=> 120
 ```
 By specifying the accumulator value, and leaving the method as a symbol, we can actually pass in both an operator and a block at the same time. 
 
@@ -115,13 +115,13 @@ It looks like the operator takes precedence over the block.
 After all that spilled ink, it looks like #reduce method can show up in one of four flavours:
 
 1. Takes a block and an accumulator
-`(1..5).reduce(0) { |memo, obj| memo += obj }`
+`(1..5).reduce(1) { |memo, obj| memo += obj }`
 2. Takes no parameters, only block
-`(1..5).reduce { |memo, obj| memo += obj }`
+`(1..5).reduce { |memo, obj| memo *= obj }`
 3. Takes an operator and an accumulator
-`(1..5).reduce(0, :+), or (1..5).reduce(0, &:+)`
+`(1..5).reduce(1, :*), or (1..5).reduce(1, &:*)`
 4. Takes an operator only (in symbol or block form)
-`(1..5).reduce(:+), or (1..5).reduce(&:+)`
+`(1..5).reduce(:*), or (1..5).reduce(&:*)`
 5*. It accepts both an operator and a block, if the operator is passed in as a symbol, and processes the operator. But why?
 
 Moving on, let's see how it can be used!
@@ -141,7 +141,7 @@ Solution using #reduce:
 end
 #=>"donkey"
 ```
-Combined with a tertiary operator, #reduce stores the sought after value in its memo parameter, returning the value at the end. 
+Combined with a ternary operator, #reduce stores the sought after value in its memo parameter, returning the value at the end. 
 
 Problem: Given a string, make it shout by duplicating every vowel 5 times. 
 
@@ -150,7 +150,7 @@ Solution using #reduce:
 "How are you?".chars.reduce { |memo, char| %w[a e i o u y].include?(char) ? memo + char * 5 : memo + char }
 #=> "Hooooow aaaaareeeee yyyyyooooouuuuu?"
 ```
-Chained after a #char method, #reduce uses a tertiary operator again to perform what's passed in through the block.
+Chained after a #char method, #reduce uses a ternary operator again to perform what's passed in through the block.
 
 2. We can also use #reduce to turn an array into a hash.
 
@@ -197,7 +197,6 @@ end
 end
 hsh
 ```
-
 3. Building an array as you go.
 
 Problem: Given an array of integers, return an array of even numbers in string form.
