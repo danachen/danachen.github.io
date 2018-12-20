@@ -115,7 +115,7 @@ It looks like the operator takes precedence over the block.
 After all that spilled ink, it looks like #reduce method can show up in one of four flavours:
 
 1. Takes a block and an accumulator
-`(1..5).reduce(1) { |memo, obj| memo += obj }`
+`(1..5).reduce(1) { |memo, obj| memo *= obj }`
 2. Takes no parameters, only block
 `(1..5).reduce { |memo, obj| memo *= obj }`
 3. Takes an operator and an accumulator
