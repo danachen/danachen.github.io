@@ -76,7 +76,7 @@ The error message tells us that a block is expected in this case.
 
 ```ruby
 (1..5).reduce(1)
-#=> 0 is not a symbol nor a string
+#=> 1 is not a symbol nor a string
 ```
 Error message suggests in the absence of a block, it's expecting either a symbol or a string to act as the operator.
 
@@ -122,7 +122,7 @@ After all that spilled ink, it looks like #reduce method can show up in one of f
 `(1..5).reduce(1, :*), or (1..5).reduce(1, &:*)`
 4. Takes an operator only (in symbol or block form)
 `(1..5).reduce(:*), or (1..5).reduce(&:*)`
-5*. It accepts both an operator and a block, if the operator is passed in as a symbol, and processes the operator. But why?
+*5. It accepts both an operator and a block, if the operator is passed in as a symbol, and processes the operator. But why?
 
 Moving on, let's see how it can be used!
 
