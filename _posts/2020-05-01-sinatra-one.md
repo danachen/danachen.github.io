@@ -31,5 +31,11 @@ We are going to work on the app in stages
 Before working with Sinatra, it's important to make sure the basic Ruby development environment isn't going to give you a lot of issues. I have encounter various error messages detailing either gem conflicts, unsupported version, etc. With enough Googling and patience, most are solvable.
 1. Google the error message to see if the error is a well-known one. In most cases, running a `gem update gem_name` might just solve the issue.
 2. The `bundler` itself might need an update, in which case `Bundler update` might do the trick.
-3. There's also the case where the 
+3. There's also one time where I mistakenly intalled both RVM and RBENV on the system, and that raised some serious havoc. The only way out was to delete one of the package manager directories altogether (in my case, `rvm implode`).
+4. There might also be compatibility issues withe specific versions of a gem. If no amount of updates fixes the issue, I usually just go ahead and `gem uninstall problem_gem`. If needed again, I install it again.
+
+In short, issues with package managers is common and happens to everyone. One thing that set my mind to rest was when a software engineer from Github told me that this is such a headache that the company has a small team of support engineers whose sole purpose was to set up problem-free development environments for their engineer team. So there.
+
+### Adding template templates
+A Sinatra framework has a few basic requirements. 
 
