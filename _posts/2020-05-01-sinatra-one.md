@@ -6,9 +6,9 @@ What I also ran into on an intermittent basis, which many do when working with a
 
 After multiple attempts, I want to finally try to chronicle the process of Sinatra development for a newbie, and the myriad of issues that one comes across, and the attempts to debug and work through those issues. 
 
-## The first project: A contact tracking app
+# The first project: A contact tracking app
 
-### What the app should do: 
+## What the app should do: 
 This is the most basic of the CRUD app, and we aren't doing anything fancy with the first one.
 The app should provide the interface to input and display the following information:
 - A unique identifier for each contact name (not visible to the user)
@@ -22,12 +22,13 @@ The app should provide the interface to input and display the following informat
 We are going to work on the app in stages
 1. Set up the development environment
 2. Add some template elements
-3. Set up debugging
-4. Get used to basic erb (our DSL of choice here) templating language
-5. Add basic `get` and post `routes`
-6. Pattern for data validation
+3. Filling up the templates with some baseline code
+4. Set up debugging
+5. Get used to basic erb (our DSL of choice here) templating language
+6. Add basic `get` and post `routes`
+7. Pattern for data validation
 
-### Setting up the development environment
+## Setting up the development environment
 Before working with Sinatra, it's important to make sure the basic Ruby development environment isn't going to give you a lot of issues. I have encounter various error messages detailing either gem conflicts, unsupported version, etc. With enough Googling and patience, most are solvable.
 1. Google the error message to see if the error is a well-known one. In most cases, running a `gem update gem_name` might just solve the issue.
 2. The `bundler` itself might need an update, in which case `Bundler update` might do the trick.
@@ -36,17 +37,24 @@ Before working with Sinatra, it's important to make sure the basic Ruby developm
 
 In short, issues with package managers is common and happens to everyone. One thing that set my mind to rest was when a software engineer from Github told me that this is such a headache that the company has a small team of support engineers whose sole purpose was to set up problem-free development environments for their engineer team. So there.
 
-### Adding template templates
-A Sinatra app typically requires the following components to work.
+## Adding template templates
+A Sinatra app typically requires at minimum, the following components to work.
 ```
-public
-  js
-  html
-  cs
-views
-main.rb
-Gemfile
-Gemfile.lock
-config.ru
-Procfile
+├── Gemfile
+├── Gemfile.lock
+├── main.rb
+└── views
+    ├── add_contact_form.erb
+    ├── contacts.erb
+    └── layout.erb
 ```
+Here's what they do:
+- `Gemfile` tracks all required gems and ensures they are all downloaded from the source
+- `Gemfile.lock` is an auto-generated file that lists all the gems that the required gems also depend on. When `bundle install` is ran, this file is regenerated
+- `main.rb` is the main Ruby file that houses the program logic. When ran locally, this is also the file ran to run the program with command `ruby main.rb`
+- `views` is the holder that controls how the logic is displayed. Typically, erb (or another DSL) works together with Ruby code to provide the front end experience
+
+What's not displayed but also necessary later on
+- There's typically a `public` folder that houses the necessary `jss`, `html`, and `css` that are responsible for more intricate styling and interactions
+- There might also be one or more folders that house additional assets (images), or data files
+- `config.ru` and `Procfile` are also necessary when the code is deployed
