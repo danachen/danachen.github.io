@@ -58,3 +58,32 @@ What's not displayed but also necessary later on
 - There's typically a `public` folder that houses the necessary `jss`, `html`, and `css` that are responsible for more intricate styling and interactions
 - There might also be one or more folders that house additional assets (images), or data files
 - `config.ru` and `Procfile` are also necessary when the code is deployed
+
+## Some baseline code
+Let's say all the files listed above are empty at the moment. It's good to fill up some of them with some baseline code, since most of these are on a template level and should be required at the start of every project.
+
+1. The `main.rb` file should have the following three blocks of code. 
+- Require a number of gems needed during development, including the `sinatra` gem, the `sinatra-reloader` gem if the code is in development - this will ensure the page on the local environment is continuously reloading based on a change in code.
+- Require `tilt/erubis` which is a gem that ensures the templating functionalities work. We will have a `layout.erb` that propagates across the whole site. The gem `sinatra/content_for` supports the `tilt` gem in **`yielding` content** across the various view pages.
+- `pry` is a great debugging gem that will come in very handy when you start wrestling with the session variable
+
+```ruby
+# main.rb
+require "sinatra"
+require "sinatra/reloader" if development?
+require "tilt/erubis"
+require "sinatra/content_for"
+require "pry"
+
+configure do
+  enable :sessions
+  set :session_secret, 'secret'
+  set :erb, escape_html: true
+end
+
+before do
+  session[:contacts] ||=[]
+  @contacts = session[:contacts]
+end
+```
+The code block `configure do` does something to make up for the lack of a database for our application. 
