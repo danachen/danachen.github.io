@@ -7,3 +7,16 @@ What I also ran into on an intermittent basis, which many do when working with a
 After multiple attempts, I want to finally try to chronicle the process of Sinatra development for a newbie, and the myriad of issues that one comes across, and the attempts to debug and work through those issues. 
 
 ## The first project: A contact tracking app
+
+### What the app should do: 
+This is the most basic of the CRUD app, and we aren't doing anything fancy with the first one.
+The app should provide the interface to input and display the following information:
+- A unique identifier for each contact name (not visible to the user)
+- Contact name
+- Contact address
+- Contact postal address
+- Contact phone
+- Contact email
+- Time of contact added
+
+
