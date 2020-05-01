@@ -37,5 +37,16 @@ Before working with Sinatra, it's important to make sure the basic Ruby developm
 In short, issues with package managers is common and happens to everyone. One thing that set my mind to rest was when a software engineer from Github told me that this is such a headache that the company has a small team of support engineers whose sole purpose was to set up problem-free development environments for their engineer team. So there.
 
 ### Adding template templates
-A Sinatra framework has a few basic requirements. 
-
+A Sinatra app typically requires the following components to work.
+```
+public
+  js
+  html
+  cs
+views
+main.rb
+Gemfile
+Gemfile.lock
+config.ru
+Procfile
+```
