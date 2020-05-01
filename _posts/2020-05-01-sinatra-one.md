@@ -19,4 +19,17 @@ The app should provide the interface to input and display the following informat
 - Contact email
 - Time of contact added
 
+We are going to work on the app in stages
+1. Set up the development environment
+2. Add some template elements
+3. Set up debugging
+4. Get used to basic erb (our DSL of choice here) templating language
+5. Add basic `get` and post `routes`
+6. Pattern for data validation
+
+### Setting up the development environment
+Before working with Sinatra, it's important to make sure the basic Ruby development environment isn't going to give you a lot of issues. I have encounter various error messages detailing either gem conflicts, unsupported version, etc. With enough Googling and patience, most are solvable.
+1. Google the error message to see if the error is a well-known one. In most cases, running a `gem update gem_name` might just solve the issue.
+2. The `bundler` itself might need an update, in which case `Bundler update` might do the trick.
+3. There's also the case where the 
 
