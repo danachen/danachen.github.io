@@ -20,10 +20,10 @@ The app should provide the interface to input and display the following informat
 - Time of contact added
 
 We are going to work on the app in stages
-1. [Set up the development environment](##Setting-up-the-development-environment)
-2. [Add some template elements](##Adding-template-codes)
-3. [Filling up the templates with some baseline code](##Some-baseline-code)
-4. [Set up debugging](##Setting-up-debugging)
+1. [Set up the development environment](##setting-up-the-development-environment)
+2. [Add some template elements](##adding-template-codes)
+3. [Filling up the templates with some baseline code](##some-baseline-code)
+4. [Set up debugging](##setting-up-debugging)
 5. [Get used to basic erb (our DSL of choice here) templating language]
 6. [Add basic `get` and post `routes`]
 7. [Pattern for data validation]
