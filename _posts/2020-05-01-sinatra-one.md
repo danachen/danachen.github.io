@@ -93,10 +93,19 @@ The first line in the `configure do` block turns the sessions on. The next line 
 
 In reality, the `session_secret` should be kept in an environment variable and not part of the code. We need to specify it here, since if no `secret` is specified, every time Sinatra starts or stop, the `secret` will be reset, and any existing session will be invalidated. To prevent it from randomly generating a new `secret` every time, we set it here.
 
+The next line we'll talk about at a later point. 
+
 Next, since the app will make use of a variable that tracks contacts as the central data structure, we need to have this data structure made available. We can equal the variable to whatever data gets entered through the app, but what happens to the variable before any data is available? The variable will cause an error when it returns `nil`. We want to give the list a default value of an empty array.
 
 Now, we can declare this variable in every route, or more sensibly, we place it in a `before` block. `||=` just means the `session[:list]` variable is either itself (if it exists), or an empty array.
 
-One more sideline before we move on from the `before` block. 
+One more sideline before we move on from the `before` block. This block is invoked before any route is executed. Typically, those blocks are used to check the validity of a session, or in this case, ensure the session variable exists.
 
-The next block we'll talk about at a later point. 
+## Setting up debugging
+The last thing I like to do before starting to write routing code is setting up debugging. I use the `pry` gem to dig through problematic code, and it's simple to use. Just `require 'pry'` on top of the `main.rb` file, and add `gem 'pry'` to the `Gemfile`, execute `bundle install`, and you are done.
+
+If the need arises for debugging, just insert `binding pry` under the code that you want to see executed, and you can access all variables within scope at that point. To get out of a global variable, press `:q`, and to get out of the session altogether, press `!!!`.
+
+## Setting up the first routes
+
+ 
