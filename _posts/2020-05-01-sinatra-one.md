@@ -86,4 +86,17 @@ before do
   @contacts = session[:contacts]
 end
 ```
-The code block `configure do` does something to make up for the lack of a database for our application. 
+The code block `configure do` does something to make up for the lack of a database for our application. We enable a Sinatra 
+session, which is a way for our app to set a cookie that persists an identifier across multiple HTTP requests. This way, information persists across multiple HTTP requests in an app.
+
+The first line in the `configure do` block turns the sessions on. The next line is an encryption key that will be used to store a `session_id`. The `session_id` is a unique alphanumeric value to a given user's session, and is stored in the browser cookie.
+
+In reality, the `session_secret` should be kept in an environment variable and not part of the code. We need to specify it here, since if no `secret` is specified, every time Sinatra starts or stop, the `secret` will be reset, and any existing session will be invalidated. To prevent it from randomly generating a new `secret` every time, we set it here.
+
+Next, since the app will make use of a variable that tracks contacts as the central data structure, we need to have this data structure made available. We can equal the variable to whatever data gets entered through the app, but what happens to the variable before any data is available? The variable will cause an error when it returns `nil`. We want to give the list a default value of an empty array.
+
+Now, we can declare this variable in every route, or more sensibly, we place it in a `before` block. `||=` just means the `session[:list]` variable is either itself (if it exists), or an empty array.
+
+One more sideline before we move on from the `before` block. 
+
+The next block we'll talk about at a later point. 
