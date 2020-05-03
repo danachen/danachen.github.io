@@ -106,6 +106,7 @@ The last thing I like to do before starting to write routing code is setting up 
 
 If the need arises for debugging, just insert `binding pry` under the code that you want to see executed, and you can access all variables within scope at that point. To get out of a global variable, press `:q`, and to get out of the session altogether, press `!!!`.
 
+At this point, the code repository looks like [this](https://github.com/danachen/contact-sinatra/tree/734301510925cfb725882a9c6ddfe2a3386503e6).
+
 ## Setting up the first routes
 
- 
