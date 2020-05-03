@@ -24,9 +24,9 @@ We are going to work on the app in stages
 2. [Add some template elements](#adding-template-codes)
 3. [Filling up the templates with some baseline code](#some-baseline-code)
 4. [Set up debugging](#setting-up-debugging)
-5. [Get used to basic erb (our DSL of choice here) templating language]
-6. [Add basic `get` and post `routes`]
-7. [Pattern for data validation]
+5. [Get used to basic erb (our DSL of choice here) templating language](#get-used-to-a-DSL)
+6. [Add basic `get` and post `routes`](#)
+7. [Pattern for data validation](#)
 
 ## Setting up the development environment
 Before working with Sinatra, it's important to make sure the basic Ruby development environment isn't going to give you a lot of issues. I have encounter various error messages detailing either gem conflicts, unsupported version, etc. With enough Googling and patience, most are solvable.
@@ -108,5 +108,5 @@ If the need arises for debugging, just insert `binding pry` under the code that 
 
 At this point, the code repository looks like [this](https://github.com/danachen/contact-sinatra/tree/734301510925cfb725882a9c6ddfe2a3386503e6).
 
-## Setting up the first routes
+## Get used to a DSL
 
