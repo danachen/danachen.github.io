@@ -20,7 +20,7 @@ The app should provide the interface to input and display the following informat
 - Time of contact added
 
 We are going to work on the app in stages
-1. [Set up the development environment](#Setting up the development environment)
+1. [Set up the development environment](##Setting-up-the-development-environment)
 2. Add some template elements
 3. Filling up the templates with some baseline code
 4. Set up debugging
