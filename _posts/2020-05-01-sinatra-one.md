@@ -21,12 +21,12 @@ The app should provide the interface to input and display the following informat
 
 We are going to work on the app in stages
 1. [Set up the development environment](##Setting-up-the-development-environment)
-2. Add some template elements
-3. Filling up the templates with some baseline code
-4. Set up debugging
-5. Get used to basic erb (our DSL of choice here) templating language
-6. Add basic `get` and post `routes`
-7. Pattern for data validation
+2. [Add some template elements](##Adding-template-codes)
+3. [Filling up the templates with some baseline code](##Some-baseline-code)
+4. [Set up debugging](##Setting-up-debugging)
+5. [Get used to basic erb (our DSL of choice here) templating language]
+6. [Add basic `get` and post `routes`]
+7. [Pattern for data validation]
 
 ## Setting up the development environment
 Before working with Sinatra, it's important to make sure the basic Ruby development environment isn't going to give you a lot of issues. I have encounter various error messages detailing either gem conflicts, unsupported version, etc. With enough Googling and patience, most are solvable.
@@ -37,7 +37,7 @@ Before working with Sinatra, it's important to make sure the basic Ruby developm
 
 In short, issues with package managers is common and happens to everyone. One thing that set my mind to rest was when a software engineer from Github told me that this is such a headache that the company has a small team of support engineers whose sole purpose was to set up problem-free development environments for their engineer team. So there.
 
-## Adding template templates
+## Adding template codes
 A Sinatra app typically requires at minimum, the following components to work.
 ```
 ├── Gemfile
