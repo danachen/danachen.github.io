@@ -24,7 +24,7 @@ We are going to work on the app in stages
 2. [Add some template elements](#adding-template-codes)
 3. [Filling up the templates with some baseline code](#some-baseline-code)
 4. [Set up debugging](#setting-up-debugging)
-5. [Get used to basic erb (our DSL of choice here) templating language](#get-used-to-a-DSL)
+5. [Get used to basic erb (our DSL of choice here) templating language](#get-used-to-some-new-syntax)
 6. [Add basic `get` and post `routes`](#)
 7. [Pattern for data validation](#)
 
@@ -108,5 +108,21 @@ If the need arises for debugging, just insert `binding pry` under the code that 
 
 At this point, the code repository looks like [this](https://github.com/danachen/contact-sinatra/tree/734301510925cfb725882a9c6ddfe2a3386503e6).
 
-## Get used to a DSL
+## Get used to some new syntax
+Sinatra is a DSL (domain specific language). From wiki, here's the definition of a DSL: "domain-specific language is somewhere between a tiny programming language and a scripting language, and is often used in a way analogous to a programming library."
+
+With Sinatra, we need to get used to the use of routes within the `Ruby` files, and the use of a templating engine. A templating engine allows the mixing of HTML and Ruby to generate web pages. In our case, we use ERB (embedded Ruby).
+
+There's a few key tags to understand before we dive into code with ERB.
+
+1. The evaluation tag `<%= %>`. This tells ERB to render the contents of the tag.
+e.g. `<h1>Hello <%= name %>!</h1>`
+2. The statement tag `<% %>`. This tells ERB to evaluate the content of the tag and replaced by output when page is rendered for the user.
+```erb
+<% @contacts.each do |contact| %> 
+    <%= contact.name %>
+    <%= contact.address %>
+    <%= contact.city %>
+<% end %>
+```
 
