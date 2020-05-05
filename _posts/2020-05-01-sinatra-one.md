@@ -25,7 +25,7 @@ We are going to work on the app in stages
 3. [Filling up the templates with some baseline code](#some-baseline-code)
 4. [Set up debugging](#setting-up-debugging)
 5. [Get used to basic erb (our DSL of choice here) templating language](#get-used-to-some-new-syntax)
-6. [Add basic `get` and post `routes`](#)
+6. [Add basic `get` and post `routes`](#add-some-basic-routes)
 7. [Pattern for data validation](#)
 
 ## Setting up the development environment
@@ -125,4 +125,27 @@ e.g. `<h1>Hello <%= name %>!</h1>`
     <%= contact.city %>
 <% end %>
 ```
+3. To comment out a line, use the hash sign `#`.
+`<%# A comment is placed here %>`
 
+This is also the time to understand the importance of layout and how that can make the html code in your app adhere to the DRY (do not repeat yourself) principle. Since most pages on a site will have the same look and feel, and most likely similar content on at least parts of the page, it would make sense to allow changes that a common to all pages propagate at once when applied.
+
+This is where the `yield` keyword comes in handy. In Sinatra, we will see the use of `yield`, which should signal that we need the layout to wait for the templates to yield before proceeding. What does this mean? It means that when a page is rendering a layout file, it will proceed until it hits the `yield` statement, and then stops and drops in the template file. When the template is done, it keeps rendering everything else after tye `yield` statement in the layout.
+
+The default view rendered is read from `views/layouterb`, but if a different view should be served instead, it needs to be explicitly stated.
+```ruby
+get '/' do
+  erb :contacts
+end
+```
+Templates take a second argument, the options hash:
+```ruby
+get '/' do
+  erb :index, :layout => :post
+end
+```
+This shows the `index.erb` template is embedded in the `post.erb` view, even though the default is `layout.erb`.
+
+
+## Add some basic routes
+We first add 
