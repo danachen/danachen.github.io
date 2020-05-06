@@ -128,14 +128,21 @@ e.g. `<h1>Hello <%= name %>!</h1>`
 3. To comment out a line, use the hash sign `#`.
 `<%# A comment is placed here %>`
 
-This is also the time to understand the importance of layout and how that can make the html code in your app adhere to the DRY (do not repeat yourself) principle. Since most pages on a site will have the same look and feel, and most likely similar content on at least parts of the page, it would make sense to allow changes that a common to all pages propagate at once when applied.
+4. This is also the time to understand the importance of layout and how that can make the html code in your app adhere to the DRY (do not repeat yourself) principle. Since most pages on a site will have the same look and feel, and most likely similar content on at least parts of the page, it would make sense to allow changes that a common to all pages propagate at once when applied.
 
 This is where the `yield` keyword comes in handy. In Sinatra, we will see the use of `yield`, which should signal that we need the layout to wait for the templates to yield before proceeding. What does this mean? It means that when a page is rendering a layout file, it will proceed until it hits the `yield` statement, and then stops and drops in the template file. When the template is done, it keeps rendering everything else after tye `yield` statement in the layout.
 
-The default view rendered is read from `views/layouterb`, but if a different view should be served instead, it needs to be explicitly stated.
+The default view rendered is read from `views/layout.erb`, but if a different view should be served instead, it needs to be explicitly stated.
 ```ruby
 get '/' do
   erb :contacts
+end
+```
+From [documentation](http://sinatrarb.com/intro.html#Templates%20with%20%3Ccode%3Eyield%3C/code%3E%20and%20nested%20layouts), we see that template content can just be passed in directly.
+```ruby
+get '/' do
+  code = "<%= Time.now %>"
+  erb code
 end
 ```
 Templates take a second argument, the options hash:
@@ -146,6 +153,52 @@ end
 ```
 This shows the `index.erb` template is embedded in the `post.erb` view, even though the default is `layout.erb`.
 
+5. Routes. 
+
+What is a route? A route is an HTTP method paired with a URL-matching pattern. Each route is associated with a block, here are some commonly used routes.
+
+The order in which they are defined matters, since the first one that matches will be used.
+```ruby
+get '/' do
+  .. show something ..
+end
+
+post '/' do
+  .. create something ..
+end
+
+put '/' do
+  .. replace something ..
+end
+
+patch '/' do
+  .. modify something ..
+end
+```
+And routes with trailing `/` are different from the ones without.
+```ruby
+get '/foo' do
+  # Does not match "GET /foo/"
+end
+```
+6. Parameters
+A hash exists within Sinatra called `params`, which holds parameters that can be accessed through the route patterns.
+```ruby
+get '/hello/:name' do
+  # matches "GET /hello/foo" and "GET /hello/bar"
+  # params['name'] is 'foo' or 'bar'
+  "Hello #{params['name']}!"
+end
+```
+Because `params` is a hash, content of the hash can be accessed via block parameters.
+```ruby
+get '/hello/:name' do |n|
+  # matches "GET /hello/foo" and "GET /hello/bar"
+  # params['name'] is 'foo' or 'bar'
+  # n stores params['name']
+  "Hello #{n}!"
+end
+```
 
 ## Add some basic routes
 We first add 
