@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Method arguments in Ruby
+title: A deeper look at Ruby's Enumerable#reduce
 ---
 
 When first learning about collections and the Enumerable module in Ruby, like most beginners, I focused on understanding and applying #each, #map, and #select. It's not until months down the road, while browsing problem solutions by Rubyists, that I began to discover the power of the #reduce method and began digging deeper. 
