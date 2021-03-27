@@ -1,0 +1,257 @@
+I"	d<p>When first learning about collections and the Enumerable module in Ruby, like most beginners, I focused on understanding and applying #each, #map, and #select. It’s not until months down the road, while browsing problem solutions by Rubyists, that I began to discover the power of the #reduce method and began digging deeper.</p>
+
+<p>In this post, I want to articulate my understanding of the method and its applications at this moment. I hope to continue updating my mental model of both the method itself, and the paradigm that it represents (Map/Reduce in functional programing).</p>
+
+<h2 id="why-reduce">Why #reduce?</h2>
+
+<p>I began this exploration by first trying to understand the problem #reduce is built to solve.</p>
+
+<p>Enumerable#reduce, like the rest of the Enumerable methods, work with collections.</p>
+
+<p>But unlike #each or #map, where a collection is returned at the end, #reduce performs a different kind of function over a collection. True to name, it “reduces”, or accumulates elements of the collection to a single value based on a binary operation, and returns one value at the end.</p>
+
+<h2 id="reduce-syntax">#reduce syntax</h2>
+
+<p>At first glance, #reduce seems to work with the same type of syntax as other members of the Enumerable class.</p>
+
+<p>Let’s compare #reduce with #map for the most basic usage.</p>
+
+<p>This is how a #map method works its way across a collection: the collection takes an enumerable object, in this case an array, and executes the block by passing in each element as an argument. The result of evaluating the block is returned as an array.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">num</span><span class="o">|</span> <span class="n">num</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">}</span>
+<span class="c1">#=&gt; [10, 12, 14, 16, 18, 20]</span>
+</code></pre></div></div>
+
+<p>The most basic use of #reduce is its go-to use of “reducing” an array of elements with a block.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">5</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">reduce</span> <span class="p">{</span> <span class="o">|</span><span class="n">sum</span><span class="p">,</span> <span class="n">n</span><span class="o">|</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">n</span> <span class="p">}</span>
+<span class="c1">#=&gt; 45</span>
+</code></pre></div></div>
+<p>This looks close enough to a #map function, the only difference being that there are two elements passed in as argument for each step of the collection. We’ll look at those in detail in a sec, but in the meantime. we’ve also seen #reduce written in shorthand like this, without a block.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="p">:</span><span class="o">*</span><span class="p">)</span>
+<span class="c1">#=&gt; 120</span>
+</code></pre></div></div>
+<p>Or like this, without the 0 (accumulator).</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(</span><span class="o">&amp;</span><span class="p">:</span><span class="o">*</span><span class="p">)</span>
+<span class="c1">#=&gt; 120</span>
+</code></pre></div></div>
+
+<p>Or like this, without even the ampersand.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(:</span><span class="o">*</span><span class="p">)</span>
+<span class="c1">#=&gt; 120</span>
+</code></pre></div></div>
+
+<p>So what is essential, and what is superfluous, when it comes to using the #reduce method?</p>
+
+<p>The Ruby documentation mentions three different inputs, which I’m going to refer to as accumulator(initial), operator(sym), and block. When passed in as arguments, memo refers to the accumulator, and obj is the current value iterated over.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">reduce</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">sym</span><span class="p">)</span> <span class="err">→</span> <span class="n">obj</span>
+<span class="n">reduce</span><span class="p">(</span><span class="n">sym</span><span class="p">)</span> <span class="err">→</span> <span class="n">obj</span>
+<span class="n">reduce</span><span class="p">(</span><span class="n">initial</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">obj</span><span class="o">|</span> <span class="n">block</span> <span class="p">}</span> <span class="err">→</span> <span class="n">obj</span>
+<span class="n">reduce</span> <span class="p">{</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">obj</span><span class="o">|</span> <span class="n">block</span> <span class="p">}</span> <span class="err">→</span> <span class="n">obj</span>
+</code></pre></div></div>
+
+<p>At the beginning of a method, we have three values that can be passed in: an accmumulator that is the starting value of the series of binary operation performed over a collection, an operator that defines the operation to be performed, and a block that can further define what needs to be performed.</p>
+
+<p>We can play around with the method by reading the error messages it throws.</p>
+
+<ol>
+  <li>Provide no block and no operator.</li>
+</ol>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span>
+<span class="c1">#=&gt; no block given</span>
+</code></pre></div></div>
+<p>The error message tells us that a block is expected in this case.</p>
+
+<ol>
+  <li>Provide only the accumulator, no operator or blocks.</li>
+</ol>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#=&gt; 1 is not a symbol nor a string</span>
+</code></pre></div></div>
+<p>Error message suggests in the absence of a block, it’s expecting either a symbol or a string to act as the operator.</p>
+
+<ol>
+  <li>Pass in a method #to_f to where a symbol is expected.</li>
+</ol>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(</span><span class="ss">:to_f</span><span class="p">)</span>
+<span class="c1">#=&gt; wrong number of arguments (given 1, expected 0)</span>
+</code></pre></div></div>
+<p>This confirms that the method only accepts a certain type of method, and #to_f isn’t one of them.</p>
+
+<ol>
+  <li>What if we try to pass in an operator and a block at the same time?</li>
+</ol>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(</span><span class="o">&amp;</span><span class="p">:</span><span class="o">*</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">obj</span><span class="o">|</span> <span class="n">memo</span> <span class="o">+=</span> <span class="n">obj</span><span class="p">}</span>
+<span class="c1">#=&gt; both block arg and actual block given</span>
+</code></pre></div></div>
+<p>It looks like we can’t pass in both an operator and a block. This could be because the &amp; turns the :+ method into a block, which then conflicts with the block that’s also getting passed in.</p>
+
+<p>But what if we change the code slightly to the following:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">*</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">obj</span><span class="o">|</span> <span class="n">memo</span> <span class="o">+=</span> <span class="n">obj</span><span class="p">}</span>
+<span class="c1">#=&gt; 120</span>
+</code></pre></div></div>
+<p>By specifying the accumulator value, and leaving the method as a symbol, we can actually pass in both an operator and a block at the same time.</p>
+
+<p>Which command will the program run? The operator or the block?</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">).</span><span class="nf">reduce</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">*</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">obj</span><span class="o">|</span> <span class="n">memo</span> <span class="o">+=</span> <span class="n">obj</span><span class="p">}</span>
+<span class="c1">#=&gt; 120</span>
+</code></pre></div></div>
+<p>It looks like the operator takes precedence over the block.</p>
+
+<p>After all that spilled ink, it looks like #reduce method can show up in one of four flavours:</p>
+
+<ol>
+  <li>Takes a block and an accumulator
+<code class="language-plaintext highlighter-rouge">(1..5).reduce(1) { |memo, obj| memo *= obj }</code></li>
+  <li>Takes no parameters, only block
+<code class="language-plaintext highlighter-rouge">(1..5).reduce { |memo, obj| memo *= obj }</code></li>
+  <li>Takes an operator and an accumulator
+<code class="language-plaintext highlighter-rouge">(1..5).reduce(1, :*), or (1..5).reduce(1, &amp;:*)</code></li>
+  <li>Takes an operator only (in symbol or block form)
+<code class="language-plaintext highlighter-rouge">(1..5).reduce(:*), or (1..5).reduce(&amp;:*)</code>
+*5. It accepts both an operator and a block, if the operator is passed in as a symbol, and processes the operator. But why?</li>
+</ol>
+
+<p>Moving on, let’s see how it can be used!</p>
+
+<h2 id="using-reduce-to-solve-problems">Using #reduce to solve problems</h2>
+
+<p>TL;DR: #reduce is particulalry effective when it comes to accumulating values across an array (accumulating not just in a numerical sense, but also to compare and select other input types such as a string), and is also handy when we want to dynamically build a new object from a collection based on another set of conditions.</p>
+
+<ol>
+  <li>Let’s see how #reduce can also be used to perform an iterative action if it involves comparison, or accumulation.</li>
+</ol>
+
+<p>Problem: Given an array of words, find the longest word.</p>
+
+<p>Solution using #reduce:</p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sx">%w(cat mouse donkey)</span><span class="p">.</span><span class="nf">reduce</span> <span class="k">do</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">word</span><span class="o">|</span> 
+    <span class="n">memo</span><span class="p">.</span><span class="nf">length</span> <span class="o">&gt;</span> <span class="n">word</span><span class="p">.</span><span class="nf">length</span> <span class="p">?</span> <span class="n">memo</span> <span class="p">:</span> <span class="n">word</span>
+<span class="k">end</span>
+<span class="c1">#=&gt;"donkey"</span>
+</code></pre></div></div>
+<p>Combined with a ternary operator, #reduce stores the sought after value in its memo parameter, returning the value at the end.</p>
+
+<p>Problem: Given a string, make it shout by duplicating every vowel 5 times.</p>
+
+<p>Solution using #reduce:</p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"How are you?"</span><span class="p">.</span><span class="nf">chars</span><span class="p">.</span><span class="nf">reduce</span> <span class="p">{</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">char</span><span class="o">|</span> <span class="sx">%w[a e i o u y]</span><span class="p">.</span><span class="nf">include?</span><span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="p">?</span> <span class="n">memo</span> <span class="o">+</span> <span class="n">char</span> <span class="o">*</span> <span class="mi">5</span> <span class="p">:</span> <span class="n">memo</span> <span class="o">+</span> <span class="n">char</span> <span class="p">}</span>
+<span class="c1">#=&gt; "Hooooow aaaaareeeee yyyyyooooouuuuu?"</span>
+</code></pre></div></div>
+<p>Chained after a #char method, #reduce uses a ternary operator again to perform what’s passed in through the block.</p>
+
+<ol>
+  <li>We can also use #reduce to turn an array into a hash.</li>
+</ol>
+
+<p>Problem: Given an array of letters like [a, b, c], return an array that shows each array element pointing to its ASCII equivalent. (Hint: make use of #ord and #update)</p>
+
+<p>Solution using #reduce: 
+Remember this is one of the ways Ruby processes #reduce:
+<code class="language-plaintext highlighter-rouge">reduce(initial) { |memo, obj| block } → obj</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sx">%w(a b c)</span><span class="p">.</span><span class="nf">reduce</span><span class="p">({})</span> <span class="p">{</span><span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">obj</span><span class="o">|</span> <span class="n">memo</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">obj</span> <span class="o">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="nf">ord</span><span class="p">)}</span>
+<span class="c1">#=&gt; {"a"=&gt;97, "b"=&gt;98, "c"=&gt;99}</span>
+</code></pre></div></div>
+
+<p>A hash is initialized as the accumulator, hash entries are added while working through the collection. Note that update is the same as #merge, and is used to update a hash.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">update</span><span class="p">(</span><span class="n">other_hash</span><span class="p">)</span> <span class="err">→</span> <span class="n">hsh</span>
+<span class="n">update</span><span class="p">(</span><span class="n">other_hash</span><span class="p">){</span><span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">oldval</span><span class="p">,</span> <span class="n">newval</span><span class="o">|</span> <span class="n">block</span><span class="p">}</span> <span class="err">→</span> <span class="n">hsh</span>
+</code></pre></div></div>
+
+<p>We can achieve the same results with 1) map/each, and 2) each_with_object, is #reduce better or worse?</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hsh</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="sx">%w(a b c)</span><span class="p">.</span><span class="nf">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="p">,</span> <span class="n">num</span><span class="o">|</span>
+    <span class="n">hsh</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">.</span><span class="nf">ord</span>
+  <span class="k">end</span>
+  <span class="n">hsh</span>
+</code></pre></div></div>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hsh</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="sx">%w(a b c)</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="p">,</span> <span class="n">num</span><span class="o">|</span>
+    <span class="n">hsh</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">.</span><span class="nf">ord</span>
+  <span class="k">end</span>
+  <span class="n">ruby</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sx">%w(a b c)</span><span class="p">.</span><span class="nf">each_with_object</span><span class="p">(</span><span class="n">hsh</span> <span class="o">=</span> <span class="p">{})</span> <span class="k">do</span> <span class="o">|</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span>
+  <span class="n">hsh</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">.</span><span class="nf">ord</span>
+<span class="k">end</span>
+<span class="n">hsh</span>
+</code></pre></div></div>
+<ol>
+  <li>Building an array as you go.</li>
+</ol>
+
+<p>Problem: Given an array of integers, return an array of even numbers in string form.</p>
+
+<p>Solution using #reduce:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">*</span><span class="mi">1</span><span class="o">..</span><span class="mi">6</span><span class="p">].</span><span class="nf">reduce</span><span class="p">([])</span> <span class="k">do</span> <span class="o">|</span><span class="n">new_arr</span><span class="p">,</span> <span class="n">el</span><span class="o">|</span>
+  <span class="n">new_arr</span> <span class="o">&lt;&lt;</span> <span class="n">el</span><span class="p">.</span><span class="nf">to_s</span> <span class="k">if</span> <span class="n">el</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+  <span class="n">new_arr</span>
+<span class="k">end</span>
+<span class="c1">#=&gt; ["2", "4", "6"]</span>
+</code></pre></div></div>
+<p>Similar to the building-a-hash as you go example above, this time we are building an array conditional on another set of properties.</p>
+
+<ol>
+  <li>#reduce can also be deployed in a procedural Fibo problem. This is not the most intuitive use of #reduce, this is but a demonstration that it is possible.</li>
+</ol>
+
+<p>Problem: Find the 10th Fibonacci number.</p>
+
+<p>Solution: this can be solved in a variety of ways, #reduce is but one of them.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">p</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">8</span><span class="p">).</span><span class="nf">reduce</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]){</span><span class="o">|</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">]}.</span><span class="nf">last</span>
+<span class="nb">p</span> <span class="p">(</span><span class="mi">3</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">reduce</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]){</span><span class="o">|</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">]}.</span><span class="nf">last</span>
+<span class="c1"># =&gt; 55</span>
+</code></pre></div></div>
+
+<p>Using good old iteration.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fibo</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+  <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="n">counter</span> <span class="o">&lt;=</span> <span class="n">n</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">end</span>
+  <span class="n">a</span>
+<span class="k">end</span>
+
+<span class="nb">p</span> <span class="n">fibo</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># =&gt; 55</span>
+</code></pre></div></div>
+
+<p>The same results with #recursion.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fibo</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="k">if</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">1</span><span class="p">).</span><span class="nf">include?</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">fibo</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibo</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="nb">p</span> <span class="n">fibo</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># =&gt; 55</span>
+</code></pre></div></div>
+
+<p>Using #each_with_object also does the job.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fibo</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">).</span><span class="nf">times</span><span class="p">.</span><span class="nf">each_with_object</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span> <span class="o">|</span><span class="n">num</span><span class="p">,</span> <span class="n">obj</span><span class="o">|</span> <span class="nb">p</span> <span class="n">obj</span> <span class="o">&lt;&lt;</span> <span class="n">obj</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">obj</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]}.</span><span class="nf">last</span>
+<span class="k">end</span>
+</code></pre></div></div>
+:ET

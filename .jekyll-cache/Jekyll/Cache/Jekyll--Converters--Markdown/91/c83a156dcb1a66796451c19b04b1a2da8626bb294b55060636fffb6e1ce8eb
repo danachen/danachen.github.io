@@ -1,0 +1,139 @@
+I"�:<p>Ruby allows for great flexibility in how arguments can be passed into a method.</p>
+
+<p>There are 3 categories of arguments that get passed into a method, depending on how you look at them:</p>
+
+<ol>
+  <li>Required arguments</li>
+  <li>Arguments with default values</li>
+  <li>Optional arguments</li>
+</ol>
+
+<p>Ex1: required arguments are pretty straightforward</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">any_old_method</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+   <span class="n">param</span>
+<span class="k">end</span>
+
+<span class="n">any_old_method</span><span class="p">(</span><span class="err">‘</span><span class="no">Hi</span> <span class="n">there!</span><span class="err">’</span><span class="p">)</span>     <span class="c1">#=&gt; ‘Hi there!</span>
+</code></pre></div></div>
+
+<p>Ex2: args with default value, note the default value is optional</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">method_with_default_value</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2018</span><span class="p">)</span>
+  <span class="s2">"It's </span><span class="si">#{</span><span class="n">a</span><span class="si">}</span><span class="s2"> in </span><span class="si">#{</span><span class="n">b</span><span class="si">}</span><span class="s2">."</span>
+<span class="k">end</span>
+
+<span class="n">method_with_default_value</span><span class="p">(</span><span class="s1">'December’)          #=&gt; “It’s December in 2018"
+method_with_default_value('</span><span class="no">December</span><span class="err">'</span><span class="p">,</span> <span class="mi">2019</span><span class="p">)</span>    <span class="c1">#=&gt; “It’s December in 2019"</span>
+</code></pre></div></div>
+
+<p>Ex3: the spat operator makes either all arguments optional …</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">any_num_of_params</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">args</span>
+<span class="k">end</span>
+
+<span class="n">any_num_of_params</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">#=&gt; [1, 2, 3, 4]</span>
+</code></pre></div></div>
+
+<p>Ex4: or, a sub-set of the parameters optional. Some are required, the rest are coerced into an array</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">any_num_of_params</span><span class="p">(</span><span class="n">required_arg</span><span class="p">,</span> <span class="o">*</span><span class="n">optional_arg</span><span class="p">)</span>
+  <span class="nb">p</span> <span class="n">required_arg</span>
+  <span class="nb">p</span> <span class="n">optional_arg</span>
+<span class="k">end</span>
+
+<span class="n">any_num_of_params</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">#=&gt; 1 [2, 3, 4]</span>
+</code></pre></div></div>
+
+<p>Ex5: an optional parameters situation, where changing the parameter list of a superclass won’t affect those in the subclass anymore. The method accepts any arguments but does nothing with them. A practical use would be in combo with the super keyword.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span>
+  <span class="k">def</span> <span class="nf">method_across_classes</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">)</span>
+    <span class="nb">puts</span> <span class="n">param1</span>
+    <span class="nb">puts</span> <span class="n">param2</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">B</span> <span class="o">&lt;</span> <span class="no">A</span>
+  <span class="k">def</span> <span class="nf">method_across_classes</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+    <span class="k">super</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">subclass_object</span> <span class="o">=</span> <span class="no">B</span><span class="p">.</span><span class="nf">new</span>
+<span class="n">subclass_object</span><span class="p">.</span><span class="nf">method_across_classes</span><span class="p">(</span><span class="s1">'param 1'</span><span class="p">,</span> <span class="err">'</span><span class="n">param</span> <span class="mi">2</span><span class="err">’</span><span class="p">)</span> <span class="c1">#=&gt; param 1 param 2</span>
+</code></pre></div></div>
+
+<p>Ex6: when types of arguments are mixed and matched, look at the progression of this example.</p>
+
+<p>We intersperse method parameters that are required, optional, or default. And in the method invocation, we provide a variety of arguments that satisfies at least the “required” number of arguments.</p>
+
+<p>Note the categories of parameters here: 1. required -&gt; a, b, d, 2. optional: <em>c, *</em>d</p>
+
+<p><em>c turns rest of input into an array, while *</em>d catches the hashes</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">testing</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="ss">d: </span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">x</span><span class="p">)</span>
+  <span class="nb">p</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">x</span>
+<span class="k">end</span>
+
+<span class="c1"># case 1</span>
+<span class="n">testing</span><span class="p">(</span><span class="err">‘</span><span class="n">a</span><span class="err">’</span><span class="p">)</span>
+<span class="c1">#=&gt; ‘a' 1 [] 1 {} </span>
+<span class="c1"># both b and d return their default values, a is passed in, and there’s no optional values for c or x to collect</span>
+
+<span class="c1"># case 2</span>
+<span class="n">testing</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">)</span>
+<span class="c1">#=&gt; ‘a' ‘b’ [‘c’] 1 {} </span>
+ <span class="c1"># a b, d are the required values and both are passed in; d takes on the default value, and the argument ‘c’ is collected by *c</span>
+
+<span class="c1"># case 3</span>
+<span class="n">testing</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="ss">d: </span><span class="mi">2</span><span class="p">,</span> <span class="ss">x: </span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#=&gt; ‘a' ‘b’ [‘c’, ‘d'] 2 {: x= &gt;1}</span>
+<span class="c1"># note the syntax for parameter are method(required, default, optional arrays, default, optional hashes)</span>
+<span class="c1"># switch the hashes and the arrays</span>
+
+<span class="c1"># case 4</span>
+<span class="n">change</span> <span class="n">the</span> <span class="nb">method</span> <span class="n">definition</span> <span class="n">slightly</span> <span class="ss">to:
+
+</span><span class="k">def</span> <span class="nf">testing</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">x</span><span class="p">)</span>
+  <span class="nb">p</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">x</span>
+<span class="k">end</span>
+
+<span class="n">testing</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">,</span> <span class="s1">'f'</span><span class="p">,</span> <span class="s1">'g'</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="ss">x: </span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#=&gt; ‘a' ‘b’ [‘c’, ‘e’, ‘f’] ‘g’ {:d =&gt; 2, : x= &gt;1}</span>
+<span class="c1"># my interpretation is that the *c is collecting all the optional value arguments passed in, until it meets the optional value arguments gathered by **x, then the string ‘g’ is passed in as the required parameter d</span>
+
+<span class="c1"># case 5</span>
+<span class="c1"># again a slight change to the method definition </span>
+
+<span class="k">def</span> <span class="nf">testing</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="o">**</span><span class="n">x</span><span class="p">)</span>
+  <span class="nb">p</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">x</span>
+<span class="k">end</span>
+
+<span class="n">testing</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="err">‘</span><span class="n">c</span><span class="s1">', '</span><span class="n">e</span><span class="s1">', '</span><span class="n">f</span><span class="s1">', '</span><span class="n">g</span><span class="s1">', d:2, x:1)
+#=&gt; ‘a'</span> <span class="err">‘</span><span class="n">b</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">c</span><span class="err">’</span><span class="p">,</span> <span class="p">[</span><span class="err">‘</span><span class="n">e</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">f</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">g</span><span class="err">’</span><span class="p">]</span> <span class="p">{</span><span class="ss">:d</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:</span> <span class="n">x</span><span class="o">=</span> <span class="o">&gt;</span><span class="mi">1</span><span class="p">}</span>
+<span class="c1"># in this case, a passes in a required parameter, b and d pass in optional value parameters (both have default values assigned), *c collects array [e, f, g], and the hash collects the rest</span>
+
+<span class="c1"># case 6a</span>
+<span class="c1"># what if we define the default value parameter after the optional value parameter?</span>
+
+<span class="k">def</span> <span class="nf">testing</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">x</span><span class="p">)</span>
+  <span class="nb">p</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">x</span>
+<span class="k">end</span>
+
+<span class="n">testing</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="err">‘</span><span class="n">c</span><span class="s1">', '</span><span class="n">e</span><span class="s1">', '</span><span class="n">f</span><span class="s1">', '</span><span class="n">g</span><span class="s1">', d:2, x:1)
+#=&gt; syntax error, unexpected '</span><span class="o">=</span><span class="s1">', expecting '</span><span class="p">)</span><span class="s1">'
+# default value parameter must occur before optional value parameter
+
+# case 6b
+# unless the default value points to a hash
+
+def testing(a, b = 1, *c, d: 1, **x)
+  p a, b, d, c, x
+end
+
+testing('</span><span class="n">a</span><span class="s1">', '</span><span class="n">b</span><span class="s1">', '</span><span class="n">c</span><span class="s1">', '</span><span class="n">e</span><span class="s1">', '</span><span class="n">f</span><span class="s1">', '</span><span class="n">g</span><span class="s1">', d: 2, x: 1)
+#=&gt; ‘a'</span> <span class="err">‘</span><span class="n">b</span><span class="err">’</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="err">‘</span><span class="n">c</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">e</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">f</span><span class="err">’</span><span class="p">,</span> <span class="err">‘</span><span class="n">g</span><span class="err">’</span><span class="p">]</span> <span class="p">{:</span> <span class="n">x</span><span class="o">=</span> <span class="o">&gt;</span><span class="mi">1</span><span class="p">}</span>
+</code></pre></div></div>
+:ET

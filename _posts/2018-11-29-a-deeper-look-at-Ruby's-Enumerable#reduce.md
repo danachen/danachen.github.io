@@ -1,3 +1,8 @@
+---
+layout: post
+title: Method arguments in Ruby
+---
+
 When first learning about collections and the Enumerable module in Ruby, like most beginners, I focused on understanding and applying #each, #map, and #select. It's not until months down the road, while browsing problem solutions by Rubyists, that I began to discover the power of the #reduce method and began digging deeper. 
 
 In this post, I want to articulate my understanding of the method and its applications at this moment. I hope to continue updating my mental model of both the method itself, and the paradigm that it represents (Map/Reduce in functional programing). 
