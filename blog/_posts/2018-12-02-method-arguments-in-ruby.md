@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Method arguments in Ruby
+category: blog
 ---
 
 Ruby allows for great flexibility in how arguments can be passed into a method.

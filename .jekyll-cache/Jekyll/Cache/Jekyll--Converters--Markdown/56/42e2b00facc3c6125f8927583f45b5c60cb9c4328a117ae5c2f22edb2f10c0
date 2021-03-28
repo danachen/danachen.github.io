@@ -1,0 +1,2 @@
+I"�<p>It’s been a while since I’ve worked on this site. Although Jekyll was relatively easy to set up direclty from Github, customizing it has been a pain. When I first forked the site a few years ago, the default theme was, and still is, Minima. And attempt to switch up the theme results in a plethora of dependency issues, whether bewteen Github pages and Jekyll, or between Github pages and Ruby version, or between a plug-in and Jekyll. I gave up trying to customize it and let it sit in dust.</p>
+:ET
