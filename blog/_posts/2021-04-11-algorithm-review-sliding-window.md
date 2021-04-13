@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Algorithm review: Sliding Window
+title: Algorithm review - Sliding Window
 category: blog
 ---
 
