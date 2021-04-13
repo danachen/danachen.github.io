@@ -1,3 +1,9 @@
+---
+layout: post
+title: Reflecting on one week of Javascript mini-projects
+category: blog
+---
+
 After a week of working through some mini-projects, I have learned a couple of things about basic Javascript DOM manipulation. It's certinaly lifted the curtain behind some commonly seen JS functionalities. 
 	- Projects and functionalities covered:
 		- Changing a background by clicking a button
