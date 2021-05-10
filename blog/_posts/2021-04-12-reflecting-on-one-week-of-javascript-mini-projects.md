@@ -5,16 +5,16 @@ category: blog
 ---
 
 After a week of working through some mini-projects, I have learned a couple of things about basic Javascript DOM manipulation. It's certinaly lifted the curtain behind some commonly seen JS functionalities. 
-	- Projects and functionalities covered:
-		- Changing a background by clicking a button
-		- Changing a background randomly and showing its HEX code
-		- Quote generator
-		- Input message in form and have it shown up elsewhere on the page
-		- Counter
-		- Image slider
-		- Testimonials
-		- Item filter from web shop
-		- Item image slider
+* Projects and functionalities covered:
+  * Changing a background by clicking a button
+  * Changing a background randomly and showing its HEX code
+  * Quote generator
+  * Input message in form and have it shown up elsewhere on the page
+  * Counter
+  * Image slider
+  * Testimonials
+  * Item filter from web shop
+  * Item image slider
 
 My basic takeaway from most of the JS projects and functionalities is the following:
 
